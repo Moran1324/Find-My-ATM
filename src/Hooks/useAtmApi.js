@@ -1,11 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AtmApiContext } from './AtmApiContext';
 
 function useAtmApi() {
-  return (
-    <div>
-      atm api
-    </div>
-  );
+  return useContext(AtmApiContext);
 }
 
 export default useAtmApi;
