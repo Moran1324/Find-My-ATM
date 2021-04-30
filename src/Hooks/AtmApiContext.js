@@ -3,37 +3,40 @@ import React, {
 } from 'react';
 import axios from 'axios';
 import cityListJson from '../data/cityList.json';
-import urlConcatenator from '../helpers/urlConcatenator';
 
 const apiUrlMain = '/api/3/action/datastore_search';
+const resourceId = 'b9d690de-0a9c-45ef-9ced-3e5957776b26';
 
 export const AtmApiContext = createContext();
 
 function AtmApiProvider({ children }) {
   const [searchResults, setSearchResults] = useState([]);
-  const [citySearch, setCitySearch] = useState('אשקלון');
-  const [bankFilter, setBankFilter] = useState(13);
-  const [atmFilter, setAtmFilter] = useState();
+  const [citySearch, setCitySearch] = useState('');
+  const [bankFilter, setBankFilter] = useState(null);
+  const [atmFilter, setAtmFilter] = useState('');
 
-  const cityList = useMemo(() => JSON.parse(cityListJson));
+  const cityList = useMemo(() => {
+    const tempList = JSON.parse(cityListJson);
+    return [...(new Set(tempList))];
+  });
 
   useEffect(() => {
     const getAtmData = async () => {
-      const resourceId = 'b9d690de-0a9c-45ef-9ced-3e5957776b26';
       const filterData = {
         City: citySearch,
         Bank_Code: bankFilter,
         ATM_Type: atmFilter,
       };
 
-      if (citySearch) filterData.City = citySearch;
-      if (bankFilter) filterData.Bank_Code = bankFilter;
-      if (atmFilter) filterData.ATM_Type = atmFilter;
+      if (!citySearch) delete filterData.City;
+      if (!bankFilter) delete filterData.Bank_Code;
+      if (!atmFilter) delete filterData.ATM_Type;
 
       const reqBody = {
         resource_id: resourceId,
       };
 
+      // array of filter values, removed null or undefined
       const ifTerm = Object.values(filterData).filter((value) => value != null);
 
       if (ifTerm.length > 0) reqBody.filters = filterData;
@@ -48,7 +51,16 @@ function AtmApiProvider({ children }) {
     getAtmData();
   }, [citySearch, bankFilter, atmFilter]);
 
-  const value = { cityList };
+  const value = {
+    cityList,
+    searchResults,
+    citySearch,
+    setCitySearch,
+    bankFilter,
+    setBankFilter,
+    atmFilter,
+    setAtmFilter,
+  };
 
   return (
     <AtmApiContext.Provider value={value}>
