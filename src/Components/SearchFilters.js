@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { TextField, IconButton, InputAdornment } from '@material-ui/core';
+import {
+  TextField, IconButton, InputAdornment, Select, Grid,
+} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { Autocomplete } from '@material-ui/lab';
 import useAtmApi from '../Hooks/useAtmApi';
@@ -9,6 +11,8 @@ function SearchFilters() {
 
   const {
     cityList,
+    banksList,
+    atmTypes,
     citySearch,
     setCitySearch,
     bankFilter,
@@ -54,6 +58,36 @@ function SearchFilters() {
             />
           )}
         />
+      </div>
+      <div className="classes.filterSelectionContainer">
+        <Grid container spacing={1}>
+          <Grid item xs={6}>
+            <Select
+              className="classes.atmTypeFilter"
+              native
+              value={atmFilter}
+              onChange={(e) => setAtmFilter(e.target.value)}
+            >
+              <option value="">כל סוגי הבנקטים</option>
+              <option value={atmTypes[1]}>{atmTypes[1]}</option>
+              <option value={atmTypes[0]}>{atmTypes[0]}</option>
+            </Select>
+          </Grid>
+          <Grid item xs={6}>
+            <Select
+              className="classes.bankFilter"
+              native
+              value={bankFilter}
+              onChange={(e) => setBankFilter(e.target.value)}
+            >
+              <option value="">כל הבנקים</option>
+              {banksList.map((bank) => (
+                <option key={bank.code} value={bank.code}>{bank.name}</option>
+              ))}
+            </Select>
+          </Grid>
+
+        </Grid>
       </div>
       <hr />
     </>

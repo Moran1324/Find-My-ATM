@@ -6,12 +6,14 @@ import ContentWrapper from '../Components/ContentWrapper';
 function Homepage() {
   return (
     <Grid container>
+      {/* <Grid item xs={1} /> */}
       <Grid item xs={12} sm={9} className="classes.map">
         <Map />
       </Grid>
       <Grid item xs={12} sm={3} className="classes.map">
         <ContentWrapper />
       </Grid>
+      {/* <Grid item xs={1} /> */}
     </Grid>
   );
 }

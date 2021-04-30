@@ -3,22 +3,25 @@ import React, {
 } from 'react';
 import axios from 'axios';
 import cityListJson from '../data/cityList.json';
+import banksList from '../data/banksList.json';
 
 const apiUrlMain = '/api/3/action/datastore_search';
 const resourceId = 'b9d690de-0a9c-45ef-9ced-3e5957776b26';
+const atmTypes = ['מכשיר מידע/או מתן הוראות\n', 'משיכת מזומן'];
 
 export const AtmApiContext = createContext();
 
 function AtmApiProvider({ children }) {
   const [searchResults, setSearchResults] = useState([]);
   const [citySearch, setCitySearch] = useState('');
-  const [bankFilter, setBankFilter] = useState(null);
+  const [bankFilter, setBankFilter] = useState('');
   const [atmFilter, setAtmFilter] = useState('');
 
   const cityList = useMemo(() => {
     const tempList = JSON.parse(cityListJson);
     return [...(new Set(tempList))];
   });
+  console.log(searchResults);
 
   useEffect(() => {
     const getAtmData = async () => {
@@ -53,6 +56,8 @@ function AtmApiProvider({ children }) {
 
   const value = {
     cityList,
+    banksList,
+    atmTypes,
     searchResults,
     citySearch,
     setCitySearch,
