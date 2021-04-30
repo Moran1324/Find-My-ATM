@@ -21,6 +21,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "https://data.gov.il",
   "eslintConfig": {
     "extends": [
       "react-app",
