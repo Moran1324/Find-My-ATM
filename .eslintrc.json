@@ -30,6 +30,7 @@
         "react/jsx-filename-extension": "off",
         // "linebreak-style": ["error", "windows"],
         "no-console": ["warn", { "allow": ["warn", "error"] }],
-        "no-unused-vars": "warn"
+        "no-unused-vars": "warn",
+        "no-underscore-dangle": 0
     }
 }
