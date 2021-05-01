@@ -8,6 +8,21 @@ import banksList from '../data/banksList.json';
 const apiUrlMain = '/api/3/action/datastore_search';
 const resourceId = 'b9d690de-0a9c-45ef-9ced-3e5957776b26';
 const atmTypes = ['מכשיר מידע/או מתן הוראות\n', 'משיכת מזומן'];
+const israelCoordinatesLimit = {
+  lat: {
+    max: 33.3,
+    min: 29.5,
+  },
+  lng: {
+    max: 35.6,
+    min: 34.18,
+  },
+};
+
+const israelLocation = {
+  lat: 31.4826581,
+  lng: 34.8673620,
+};
 
 export const AtmApiContext = createContext();
 
@@ -16,6 +31,8 @@ function AtmApiProvider({ children }) {
   const [citySearch, setCitySearch] = useState('');
   const [bankFilter, setBankFilter] = useState('');
   const [atmFilter, setAtmFilter] = useState('');
+  const [mapZoom, setMapZoom] = useState(8);
+  const [mapCenter, setMapCenter] = useState(israelLocation);
 
   const cityList = useMemo(() => {
     const tempList = JSON.parse(cityListJson);
@@ -46,7 +63,21 @@ function AtmApiProvider({ children }) {
 
       try {
         const { data } = await axios.post(apiUrlMain, reqBody);
-        setSearchResults(data.result.records);
+        const tempResults = data.result.records.map((record) => {
+          const ifCheck = record.X_Coordinate < israelCoordinatesLimit.lat.min
+            || record.X_Coordinate > israelCoordinatesLimit.lat.max
+            || record.Y_Coordinate < israelCoordinatesLimit.lng.min
+            || record.Y_Coordinate > israelCoordinatesLimit.lng.max;
+          if (ifCheck) {
+            return {
+              ...record,
+              X_Coordinate: record.Y_Coordinate,
+              Y_Coordinate: record.X_Coordinate,
+            };
+          }
+          return record;
+        });
+        setSearchResults(tempResults);
       } catch (e) {
         console.log(e.message);
       }
@@ -55,6 +86,10 @@ function AtmApiProvider({ children }) {
   }, [citySearch, bankFilter, atmFilter]);
 
   const value = {
+    mapZoom,
+    setMapZoom,
+    mapCenter,
+    setMapCenter,
     cityList,
     banksList,
     atmTypes,
