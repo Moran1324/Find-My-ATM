@@ -38,7 +38,10 @@ function AtmApiProvider({ children }) {
     const tempList = JSON.parse(cityListJson);
     return [...(new Set(tempList))];
   });
-  console.log(searchResults);
+  console.log(searchResults.map((result) => [
+    result.X_Coordinate,
+    result.Y_Coordinate,
+  ]));
 
   useEffect(() => {
     const getAtmData = async () => {
@@ -63,20 +66,23 @@ function AtmApiProvider({ children }) {
 
       try {
         const { data } = await axios.post(apiUrlMain, reqBody);
-        const tempResults = data.result.records.map((record) => {
-          const ifCheck = record.X_Coordinate < israelCoordinatesLimit.lat.min
-            || record.X_Coordinate > israelCoordinatesLimit.lat.max
-            || record.Y_Coordinate < israelCoordinatesLimit.lng.min
-            || record.Y_Coordinate > israelCoordinatesLimit.lng.max;
-          if (ifCheck) {
-            return {
-              ...record,
-              X_Coordinate: record.Y_Coordinate,
-              Y_Coordinate: record.X_Coordinate,
-            };
-          }
-          return record;
-        });
+        const tempResults = data.result.records
+          .filter((record) => !record.X_Coordinate === false
+            || record.Y_Coordinate === false)
+          .map((record) => {
+            const ifCheck = (record.X_Coordinate < israelCoordinatesLimit.lat.min
+            || record.X_Coordinate > israelCoordinatesLimit.lat.max)
+            && (record.Y_Coordinate < israelCoordinatesLimit.lng.min
+            || record.Y_Coordinate > israelCoordinatesLimit.lng.max);
+            if (ifCheck) {
+              return {
+                ...record,
+                X_Coordinate: record.Y_Coordinate,
+                Y_Coordinate: record.X_Coordinate,
+              };
+            }
+            return record;
+          });
         setSearchResults(tempResults);
       } catch (e) {
         console.log(e.message);
