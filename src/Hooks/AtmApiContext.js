@@ -5,7 +5,7 @@ import axios from 'axios';
 import cityListJson from '../data/cityList.json';
 import banksList from '../data/banksList.json';
 
-const apiUrlMain = '/api/3/action/datastore_search';
+const apiUrlMain = 'https://data.gov.il/api/3/action/datastore_search';
 const resourceId = 'b9d690de-0a9c-45ef-9ced-3e5957776b26';
 const atmTypes = ['מכשיר מידע/או מתן הוראות\n', 'משיכת מזומן'];
 const israelCoordinatesLimit = {
