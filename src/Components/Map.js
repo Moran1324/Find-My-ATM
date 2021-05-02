@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
-  MapContainer, Marker, Popup, TileLayer,
+  MapContainer, Marker, Popup, TileLayer, useMap,
 } from 'react-leaflet';
 import { Icon } from 'leaflet';
 import useAtmApi from '../Hooks/useAtmApi';
@@ -39,7 +39,7 @@ function Map() {
       className={classes.mapContainer}
       center={mapCenter}
       zoom={mapZoom}
-      // scrollWheelZoom={false}
+      scrollWheelZoom={false}
     >
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -58,9 +58,16 @@ function Map() {
           </Popup>
         </Marker>
       ))}
-
+      <ChangeMapView coords={mapCenter} zoom={mapZoom} />
     </MapContainer>
   );
+}
+
+function ChangeMapView({ coords, zoom }) {
+  const map = useMap();
+  map.setView(coords, zoom);
+
+  return null;
 }
 
 export default Map;

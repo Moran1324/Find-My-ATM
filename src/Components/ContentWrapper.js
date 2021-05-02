@@ -5,7 +5,7 @@ import AtmResults from './AtmResults';
 
 function ContentWrapper() {
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" justify="space-between">
       <Grid item>
         <SearchFilters />
       </Grid>

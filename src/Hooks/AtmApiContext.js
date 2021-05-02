@@ -38,10 +38,7 @@ function AtmApiProvider({ children }) {
     const tempList = JSON.parse(cityListJson);
     return [...(new Set(tempList))];
   });
-  console.log(searchResults.map((result) => [
-    result.X_Coordinate,
-    result.Y_Coordinate,
-  ]));
+  console.log(searchResults);
 
   useEffect(() => {
     const getAtmData = async () => {
@@ -91,11 +88,18 @@ function AtmApiProvider({ children }) {
     getAtmData();
   }, [citySearch, bankFilter, atmFilter]);
 
+  const setMapFocus = (x, y) => {
+    setMapCenter({
+      lat: x,
+      lng: y,
+    });
+  };
+
   const value = {
     mapZoom,
     setMapZoom,
     mapCenter,
-    setMapCenter,
+    setMapFocus,
     cityList,
     banksList,
     atmTypes,
