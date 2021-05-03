@@ -15,14 +15,13 @@ const useStyles = makeStyles({
 
 function AtmResults() {
   const {
-    searchResults, mapCenter, setMapFocus, setMapZoom, atmTypes,
+    searchResults, mapCenter, setMapFocus, atmTypes,
   } = useAtmApi();
 
   const classes = useStyles();
 
   const handleClick = (x, y) => {
-    setMapFocus(x, y);
-    setMapZoom(12);
+    setMapFocus(x, y, 16);
   };
 
   return (

@@ -34,11 +34,20 @@ function AtmApiProvider({ children }) {
   const [mapZoom, setMapZoom] = useState(8);
   const [mapCenter, setMapCenter] = useState(israelLocation);
 
+  // add empty dependencies array
   const cityList = useMemo(() => {
     const tempList = JSON.parse(cityListJson);
     return [...(new Set(tempList))];
   });
   console.log(searchResults);
+
+  const setMapFocus = (x, y, zoom) => {
+    setMapCenter({
+      lat: x,
+      lng: y,
+    });
+    setMapZoom(zoom);
+  };
 
   useEffect(() => {
     const getAtmData = async () => {
@@ -81,19 +90,15 @@ function AtmApiProvider({ children }) {
             return record;
           });
         setSearchResults(tempResults);
+        if (citySearch !== '') {
+          setMapFocus(tempResults[0].X_Coordinate, tempResults[0].Y_Coordinate, 12);
+        }
       } catch (e) {
         console.log(e.message);
       }
     };
     getAtmData();
   }, [citySearch, bankFilter, atmFilter]);
-
-  const setMapFocus = (x, y) => {
-    setMapCenter({
-      lat: x,
-      lng: y,
-    });
-  };
 
   const value = {
     mapZoom,
