@@ -62,7 +62,7 @@ function AtmApiProvider({ children }) {
       if (ifTerm.length > 0) reqBody.filters = filterData;
 
       try {
-        const { data } = await axios.post(apiUrlMain, reqBody, {'Access-Control-Allow-Origin': '*'});
+        const { data } = await axios.post(apiUrlMain, reqBody, {['Access-Control-Allow-Origin']: '*'});
         const tempResults = data.result.records
           .filter((record) => !record.X_Coordinate === false
             || record.Y_Coordinate === false)
