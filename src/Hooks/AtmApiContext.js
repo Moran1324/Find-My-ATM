@@ -71,7 +71,7 @@ function AtmApiProvider({ children }) {
       if (ifTerm.length > 0) reqBody.filters = filterData;
 
       try {
-        const { data } = await axios.get(apiUrlMain, reqBody, {
+        const { data } = await axios.post(apiUrlMain, reqBody, {
           headers: {
             'Access-Control-Allow-Origin': '*',
           },
